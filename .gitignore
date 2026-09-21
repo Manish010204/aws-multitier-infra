@@ -1,6 +1,6 @@
 # Terraform — never commit these
-.terraform/
-.terraform.lock.hcl
+**/.terraform/*
+!.terraform.lock.hcl
 *.tfstate
 *.tfstate.backup
 tfplan
