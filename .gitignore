@@ -1,0 +1,14 @@
+# Terraform — never commit these
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+tfplan
+crash.log
+
+# Sensitive — NEVER commit
+terraform.tfvars
+
+# OS
+.DS_Store
+*.swp
