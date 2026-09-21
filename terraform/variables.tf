@@ -65,3 +65,14 @@ variable "db_name" {
   type        = string
   default     = "appdb"
 }
+
+variable "ami_id" {
+  description = "AMI ID for EC2 instances (Amazon Linux 2023)"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}

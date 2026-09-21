@@ -1,12 +1,3 @@
-# ─────────────────────────────────────────────
-# Root Module — Calls all child modules
-#
-# Think of this as the "director"
-# It doesn't create resources directly
-# It calls modules and passes them inputs
-# ─────────────────────────────────────────────
-
-# ── VPC MODULE ────────────────────────────────
 module "vpc" {
   source = "./modules/vpc"
 
@@ -16,7 +7,14 @@ module "vpc" {
   azs         = var.azs
 }
 
-# More modules coming in later labs:
-# module "compute" { ... }
-# module "database" { ... }
-# module "monitoring" { ... }
+module "compute" {
+  source = "./modules/compute"
+
+  project                = var.project
+  environment            = var.environment
+  vpc_id                 = module.vpc.vpc_id
+  public_subnet_ids      = module.vpc.public_subnet_ids
+  private_app_subnet_ids = module.vpc.private_app_subnet_ids
+  ami_id                 = var.ami_id
+  instance_type          = var.instance_type
+}
