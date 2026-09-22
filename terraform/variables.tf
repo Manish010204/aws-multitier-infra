@@ -42,11 +42,7 @@ variable "alert_email" {
   type        = string
 }
 
-variable "slack_webhook_url" {
-  description = "Slack incoming webhook URL for alerts"
-  type        = string
-  sensitive   = true
-}
+
 
 variable "db_username" {
   description = "RDS master username"
