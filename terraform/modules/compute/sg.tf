@@ -33,7 +33,7 @@ resource "aws_security_group" "alb" {
 # Controls what traffic reaches EC2 instances
 resource "aws_security_group" "ec2" {
   name        = "${var.project}-${var.environment}-ec2-sg"
-  description = "Allow HTTP only from ALB — not from internet"
+  description = "Allow HTTP only from ALB - not from internet"
   vpc_id      = var.vpc_id
 
   # KEY SECURITY DECISION:

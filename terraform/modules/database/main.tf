@@ -94,7 +94,7 @@ resource "aws_db_instance" "main" {
   maintenance_window = "Mon:04:00-Mon:05:00"
 
   # Performance Insights — free tier available
-  performance_insights_enabled = true
+  performance_insights_enabled = false
 
   # skip_final_snapshot = true means terraform
   # destroy works cleanly without creating a snapshot

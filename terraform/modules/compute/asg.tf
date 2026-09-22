@@ -49,8 +49,8 @@ resource "aws_launch_template" "app" {
 resource "aws_autoscaling_group" "app" {
   name                = "${var.project}-${var.environment}-asg"
   min_size            = 1 # never go below 1
-  max_size            = 3 # never go above 3
-  desired_capacity    = 2 # start with 2
+  max_size            = 2 # never go above 3
+  desired_capacity    = 1 # start with 2
   vpc_zone_identifier = var.private_app_subnet_ids
 
   target_group_arns = [aws_lb_target_group.app.arn]
