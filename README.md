@@ -255,5 +255,5 @@ This project was built and deployed end-to-end, hitting and fixing real producti
 **Manish Kumar Thakur**
 
 - GitHub: [@Manish010204](https://github.com/Manish010204)
-- LinkedIn: [manish-thakur](https://linkedin.com/in/manish-thakur)
+- LinkedIn: [manish-thakur](https://www.linkedin.com/in/manish-thakur-lpu/)
 - Email: p2004.manishthakur@gmail.com
