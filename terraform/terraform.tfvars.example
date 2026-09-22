@@ -1,0 +1,17 @@
+# Copy this file to terraform.tfvars and fill your values
+# cp terraform.tfvars.example terraform.tfvars
+
+aws_region    = "ap-south-1"
+project       = "multitier"
+environment   = "dev"
+vpc_cidr      = "10.0.0.0/16"
+azs           = ["ap-south-1a", "ap-south-1b"]
+
+alert_email   = "your-email@gmail.com"
+
+db_username   = "adminuser"
+db_password   = "YourStrongPassword123!"
+db_name       = "appdb"
+
+ami_id        = "ami-0ee11497c4eac651d"
+instance_type = "t2.micro"
