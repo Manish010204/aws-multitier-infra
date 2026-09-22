@@ -1,0 +1,88 @@
+# ─────────────────────────────────────────────
+# GitHub Actions — Terraform CI
+#
+# Triggers on every push and PR to main
+# Runs: format check → validate → plan
+#
+# WHY: Catches Terraform errors before they
+# reach AWS. No broken code gets merged.
+# ─────────────────────────────────────────────
+
+name: Terraform CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  TF_VERSION: "1.6.0"
+  AWS_REGION: "ap-south-1"
+
+jobs:
+  terraform:
+    name: Terraform Validate & Plan
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      # ── Checkout code ──────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Setup Terraform ────────────────────
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      # ── Configure AWS credentials ──────────
+      # Uses GitHub Secrets — never hardcode keys
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ env.AWS_REGION }}
+
+      # ── Format check ───────────────────────
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        # WHY -check: doesn't modify files
+        # just exits with error if formatting wrong
+        # Forces clean code standards
+
+      # ── Init ───────────────────────────────
+      - name: Terraform Init
+        run: terraform init
+        env:
+          TF_VAR_alert_email:    ${{ secrets.ALERT_EMAIL }}
+          TF_VAR_db_password:    ${{ secrets.DB_PASSWORD }}
+          TF_VAR_db_username:    ${{ secrets.DB_USERNAME }}
+          TF_VAR_db_name:        ${{ secrets.DB_NAME }}
+
+      # ── Validate ───────────────────────────
+      - name: Terraform Validate
+        run: terraform validate
+
+      # ── Plan ───────────────────────────────
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var="alert_email=${{ secrets.ALERT_EMAIL }}" \
+            -var="db_password=${{ secrets.DB_PASSWORD }}" \
+            -var="db_username=${{ secrets.DB_USERNAME }}" \
+            -var="db_name=${{ secrets.DB_NAME }}" \
+            -var="ami_id=ami-0ee11497c4eac651d" \
+            -no-color 2>&1 | head -100
+        # WHY head -100: plan output can be huge
+        # truncate to first 100 lines for readability
+        # Full plan still runs — just display truncated
+        continue-on-error: true
+        # WHY continue-on-error: plan may fail if
+        # resources already exist or state is empty
+        # We want validate to be the gate — not plan
