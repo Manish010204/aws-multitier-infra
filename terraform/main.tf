@@ -18,3 +18,17 @@ module "compute" {
   ami_id                 = var.ami_id
   instance_type          = var.instance_type
 }
+
+# ── DATABASE MODULE ───────────────────────────
+module "database" {
+  source = "./modules/database"
+
+  project               = var.project
+  environment           = var.environment
+  vpc_id                = module.vpc.vpc_id
+  private_db_subnet_ids = module.vpc.private_db_subnet_ids
+  ec2_sg_id             = module.compute.ec2_sg_id
+  db_name               = var.db_name
+  db_username           = var.db_username
+  db_password           = var.db_password
+}
